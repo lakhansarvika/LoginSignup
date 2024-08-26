@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="login">
+        <h2>Login</h2>
+        <form action="#">
+          <input type="email" placeholder="Enter your Email" id="loginEmail" />
+          <input
+            type="password"
+            placeholder="Enter your password"
+            id="loginPassword"
+          />
+          <button id="loginBtn">Login</button>
+          <span class="errorMessage" id="errorMessage"></span>
+          <p>
+            Don't have any account? <br /><a href="/Ragister.html">Register</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const loginEmail = document.getElementById("loginEmail");
+      const loginPassword = document.getElementById("loginPassword");
+      const loginBtn = document.getElementById("loginBtn");
+      const errorMessage = document.getElementById('errorMessage')
+
+      loginBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const loginData = JSON.parse(localStorage.getItem("users")) || [];
+  const matchData = loginData.filter(
+    (value) =>
+      value.email === loginEmail.value.trim() &&
+      value.password === loginPassword.value.trim()
+  );
+
+  if (matchData.length > 0) {
+    sessionStorage.setItem("loggedInUserEmail", matchData[0].email);
+    alert("Login Successfully");
+    window.location.href = "/dashboard.html";
+  } else {
+    // alert("Wrong username or password");
+    errorMessage.innerHTML = "Wrong username or password"
+  }
+});
+
+
+
+    </script>
+  </body>
+</html>
