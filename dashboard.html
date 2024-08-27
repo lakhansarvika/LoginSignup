@@ -58,7 +58,9 @@
       // Retrieve the logged-in user's email from sessionStorage
 const loggedInUserEmail = sessionStorage.getItem("loggedInUserEmail");
 
+
 const localdata = JSON.parse(localStorage.getItem("users")) || [];
+
 
 const userName = document.getElementById("userName");
 const logoutBtn = document.getElementById("logoutBtn");
@@ -68,6 +70,8 @@ let tableBody = document.getElementById("data-table").getElementsByTagName("tbod
 const filteredData = localdata.filter(item => item.email === loggedInUserEmail);
 
 filteredData.forEach((item) => {
+  console.log(item);
+  userName.innerHTML = `hi, ${item.name}`
   let newRow = tableBody.insertRow();
 
   let idCell = newRow.insertCell(0);
@@ -92,6 +96,16 @@ logoutBtn.addEventListener("click", () => {
     window.location.href = "/index.html";
   }
 });
+
+function checkLoginStatus() {
+            const loggedInUserEmail = sessionStorage.getItem("loggedInUserEmail");
+            if (!loggedInUserEmail) {
+                window.location.href = "/index.html"; // Redirect to login page if not logged in
+            }
+        }
+
+        // Call the function when the page loads
+        window.onload = checkLoginStatus;
 
     </script>
   </body>

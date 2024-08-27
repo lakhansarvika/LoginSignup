@@ -4,16 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <!-- Font Awesome -->
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
     />
 
     <title>Login</title>
   </head>
   <body>
-    <div class="container">
+    <div class="container2">
       <div class="login">
         <h2>Login</h2>
         <form action="#">
@@ -32,34 +33,89 @@
       </div>
     </div>
 
+    <!-- Bootstrap Modal -->
+<!-- <div class="modal fade" id="loginSuccessModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="color:black; text-align: center;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Login Status</h5>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <h1>Login Successful</h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Okay</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="color:black; text-align: center;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Login status</h5>
+      </div>
+      <div class="modal-body" id="modalStatus">
+        <h4></h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Okay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <script>
       const loginEmail = document.getElementById("loginEmail");
       const loginPassword = document.getElementById("loginPassword");
       const loginBtn = document.getElementById("loginBtn");
-      const errorMessage = document.getElementById('errorMessage')
-
+      const errorMessage = document.getElementById("errorMessage");
+      const modalStatus = document.getElementById("modalStatus");
+    
       loginBtn.addEventListener("click", (e) => {
-  e.preventDefault();
+        e.preventDefault();
+    
+        const loginData = JSON.parse(localStorage.getItem("users")) || [];
+        const matchData = loginData.filter(
+          (value) =>
+            value.email === loginEmail.value.trim() &&
+            value.password === loginPassword.value.trim()
+        );
+    
+        if (matchData.length > 0) {
+          sessionStorage.setItem("loggedInUserEmail", matchData[0].email);
+  
+          modalStatus.innerHTML = "Login Successful";
+          $('#exampleModalCenter').modal('show');
 
-  const loginData = JSON.parse(localStorage.getItem("users")) || [];
-  const matchData = loginData.filter(
-    (value) =>
-      value.email === loginEmail.value.trim() &&
-      value.password === loginPassword.value.trim()
-  );
+          $('#exampleModalCenter').on('hidden.bs.modal', function () {
+            window.location.href = "/dashboard.html";
+          });
+        } else {
+          modalStatus.innerHTML = "Wrong username or password";
+          $('#exampleModalCenter').modal('show');
 
-  if (matchData.length > 0) {
-    sessionStorage.setItem("loggedInUserEmail", matchData[0].email);
-    alert("Login Successfully");
-    window.location.href = "/dashboard.html";
-  } else {
-    // alert("Wrong username or password");
-    errorMessage.innerHTML = "Wrong username or password"
-  }
-});
-
-
-
+          $('#exampleModalCenter').on('hidden.bs.modal', function () {
+            window.location.href = "/dashboard.html";
+          });
+        }
+      });
+    
+      function redirectIfLoggedIn() {
+        const loggedInUserEmail = sessionStorage.getItem("loggedInUserEmail");
+        if (loggedInUserEmail) {
+          window.location.href = "/dashboard.html";
+        }
+      }
+    
+      window.onload = redirectIfLoggedIn;
     </script>
+     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
   </body>
 </html>
